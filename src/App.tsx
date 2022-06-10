@@ -1,9 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
 import Signup from "./widgets/Signup"
 import './App.css'
+import {LoggedInUser, loginUser, signupUser, logoutUser, UserFormData} from './util'
 
 export const App = () => {
+    const [currentUser, setCurrentUser] = useState<LoggedInUser>({ email: '' });
+    const appLoginUser = async ({ userEmail, userPassword} : UserFormData) => {
+        let u = await loginUser({ userEmail, userPassword})
+        setCurrentUser(u)
+    }
+    const appSignupUser = async ({ userEmail, userPassword} : UserFormData) => {
+        let u = await signupUser({ userEmail, userPassword})
+        setCurrentUser(u)
+    }
+    const appLogoutUser = async () => {
+        await logoutUser()
+        setCurrentUser({ email: '' })
+    }
     return (
         <>
         <div className="container">
@@ -39,7 +52,7 @@ export const App = () => {
                     <path d="M21 21l-5.2-5.2" />
                     </svg>
                 </a>
-                <Signup />
+                 <Signup user={currentUser} onSignup={appSignupUser} onSignin={appLoginUser} onLogout={appLogoutUser} />
                 </div>
             </div>
             </header>
