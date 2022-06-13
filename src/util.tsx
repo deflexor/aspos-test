@@ -9,6 +9,11 @@ export type LoggedInUser = {
   error?: Error;
 }
 
+export type WeatherData = {
+  temp: number;
+  location: string;
+}
+
 export async function loginUser(credentials: UserFormData) : Promise<LoggedInUser> {
   return fetch('/api/signin', {
     method: 'POST',

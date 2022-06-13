@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import Signup from "./widgets/Signup"
 import Weather from "./widgets/Weather"
 import './App.css'
-import {LoggedInUser, loginUser, signupUser, logoutUser, UserFormData} from './util'
+import {LoggedInUser, loginUser, signupUser, logoutUser, UserFormData, WeatherData} from './util'
 
 export const App = () => {
     const [currentUser, setCurrentUser] = useState<LoggedInUser>({ email: '' });
+    const [weather, setWeather] = useState<WeatherData>({ location: 'NY', temp: 20 });
     const appLoginUser = async ({ userEmail, userPassword} : UserFormData) => {
         let u = await loginUser({ userEmail, userPassword})
         setCurrentUser(u)
@@ -325,10 +326,7 @@ export const App = () => {
             <div className="col-md-4">
                 <div className="position-sticky" style={{ top: "2rem" }}>
                 <div className="p-4 mb-3 bg-warning rounded">
-                    <h4 className="fst-italic">Weather Widget</h4>
-                    <p className="mb-0">
-                    Customize this section to show temporature and location.
-                    </p>
+                    <Weather weatherData={weather} />
                 </div>
                 <div className="p-4">
                     <h4 className="fst-italic">Archives</h4>

@@ -19,13 +19,17 @@ export default function Signup(props: SignupProps) {
 
     const handleSubmit = async (e:  React.FormEvent) => {
         e.preventDefault();
-        if(userEmail === '') {
-            setError('E-mail is required')
-        }
+        let err = ''
         if(userPassword === '') {
-            setError('Password is required')
+            err = 'Password is required'
         }
-        if(error === '') {
+        if(userEmail === '') {
+            err = 'E-mail is required'
+        }
+        if(err !== '') {
+            setError(err)
+        } else {
+            setError('')
             const userData : UserFormData = { userEmail, userPassword };
             const loginCB = isSignup ? props.onSignup : props.onSignin
             loginCB(userData)
@@ -43,8 +47,11 @@ export default function Signup(props: SignupProps) {
     } else {
         html = (
         <form onSubmit={handleSubmit}>
-            {error && <div id="emailHelp" className="form-text">{error}</div>}
-            {props.user.error && <div id="emailHelp" className="form-text">{props.user.error.message}</div>}
+            <div className="small error">
+                {props.user.error ? <div id="emailHelp" className="text-danger">{props.user.error.message}</div>
+                : error ? <div id="emailHelp" className="text-danger">{error}</div> : ''
+                }
+            </div>
             <div className="mb-3">
                 <input type="email" placeholder="E-mail" className="form-control form-control-sm" onChange={e => setUserEmail(e.target.value)} />
             </div>
@@ -52,7 +59,7 @@ export default function Signup(props: SignupProps) {
                 <input type="password" placeholder="Password" className="form-control form-control-sm" onChange={e => setUserPassword(e.target.value)} />
             </div>
             <div className="login-btns">
-                <button type="submit" className="btn btn-primary btn-sm">{isSignup ? 'Signup' : 'Login'}</button>
+                <button type="submit" className="btn btn-primary btn-sm">{isSignup ? 'Login' : 'Signup'}</button>
                 {isSignup ? <a href="" onClick={e => { e.preventDefault(); setSignup(false)}}>Signup</a>
                       : <a href="" onClick={e => { e.preventDefault(); setSignup(true)}}>Signin</a>}
             </div>
