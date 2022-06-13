@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Signup from "./widgets/Signup"
+import Weather from "./widgets/Weather"
 import './App.css'
 import {LoggedInUser, loginUser, signupUser, logoutUser, UserFormData} from './util'
 

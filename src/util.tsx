@@ -10,7 +10,7 @@ export type LoggedInUser = {
 }
 
 export async function loginUser(credentials: UserFormData) : Promise<LoggedInUser> {
-  return fetch('/login', {
+  return fetch('/api/signin', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ export async function loginUser(credentials: UserFormData) : Promise<LoggedInUse
  }
 
  export async function signupUser(credentials: UserFormData) : Promise<LoggedInUser> {
-  return fetch('/login', {
+  return fetch('api/signup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import {LoggedInUser, UserFormData} from '../util'
 
+import './Signup.css'
+
 type SignupProps = {
     user: LoggedInUser;
     onSignup: (data: UserFormData) => void;
@@ -25,7 +27,8 @@ export default function Signup(props: SignupProps) {
         }
         if(error === '') {
             const userData : UserFormData = { userEmail, userPassword };
-            isSignup ? props.onSignup(userData) : props.onSignin(userData)
+            const loginCB = isSignup ? props.onSignup : props.onSignin
+            loginCB(userData)
         }
     }
 
@@ -34,7 +37,7 @@ export default function Signup(props: SignupProps) {
         html = (
         <div>
             <div className="mb-3">{props.user.email}</div>
-            <a href="javascript:void(0)" onClick={e => props.onLogout()}>Exit</a>
+            <a href="" onClick={e => { e.preventDefault(); props.onLogout() }}>Exit</a>
         </div>
         )
     } else {
@@ -43,16 +46,16 @@ export default function Signup(props: SignupProps) {
             {error && <div id="emailHelp" className="form-text">{error}</div>}
             {props.user.error && <div id="emailHelp" className="form-text">{props.user.error.message}</div>}
             <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
-                <input type="email" className="form-control" onChange={e => setUserEmail(e.target.value)} />
+                <input type="email" placeholder="E-mail" className="form-control form-control-sm" onChange={e => setUserEmail(e.target.value)} />
             </div>
             <div className="mb-3">
-                <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                <input type="password" className="form-control" onChange={e => setUserPassword(e.target.value)} />
+                <input type="password" placeholder="Password" className="form-control form-control-sm" onChange={e => setUserPassword(e.target.value)} />
             </div>
-            <button type="submit" className="btn btn-primary">{isSignup ? 'Signup' : 'Login'}</button>
-            {isSignup ? <a href="javascript:void(0)" onClick={e => setSignup(true)}>Signup</a>
-                      : <a href="javascript:void(0)" onClick={e => setSignup(false)}>Signin</a>}
+            <div className="login-btns">
+                <button type="submit" className="btn btn-primary btn-sm">{isSignup ? 'Signup' : 'Login'}</button>
+                {isSignup ? <a href="" onClick={e => { e.preventDefault(); setSignup(false)}}>Signup</a>
+                      : <a href="" onClick={e => { e.preventDefault(); setSignup(true)}}>Signin</a>}
+            </div>
         </form>)
     }
 
