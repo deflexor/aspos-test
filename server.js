@@ -9,6 +9,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const isTest = process.env.NODE_ENV === 'test' || !!process.env.VITE_TEST_BUILD
 
+const WEATHER_DATA = [
+  { id: 'NY', location: 'NY', temp: 20 },
+  { id: 'Tokyo', location: 'Tokyo', temp: 24 },
+  { id: 'Msk', location: 'Moscow', temp: 15 },
+  { id: 'Paris', location: 'Paris', temp: 19 },
+  { id: 'SA', location: 'Saudi Arabia', temp: 36 },
+  { id: 'Norway', 'location': 'Norway', temp: 14 },
+]
+
 process.env.MY_CUSTOM_SECRET = 'API_KEY_qwertyuiop'
 
 function setupAPI(app) {
@@ -26,20 +35,6 @@ function setupAPI(app) {
     res.json({ email: userEmail })
   });
 
-
-    /*   POST api/signup – добавляет нового пользователя в систему.
-    Параметры:
-    email – почтовый адрес, который должен быть уникален для каждого пользователя
-    password - пароль
-
-    POST api/signin – логинит существующего пользователя.
-    Параметры:
-    email – уникальный почтовый адрес пользователя
-    password - пароль
-
-
-    */
-
     /*
      Виджет показывает температуру в выбранном месте (Например, “NY 20°C”). 
      Место, для которого отображается температура, можно выбрать из списка доступных. 
@@ -48,25 +43,26 @@ function setupAPI(app) {
     которое он сохранил в системе для себя (или погода в месте по умолчанию, если пользователь не сохранял погоду).
 
      */
-    // GET api/weather – возвращает список мест и их идентификаторов, по которым есть данные по погоде.
-    // GET api/weather?location={locationId} – возвращает текущую температуру и место по идентификатору места locationId.
-    // GET api/weather?user={userId} – возвращает текущую температуру и место по идентификатору пользователя.
-    // POST api/weather –для заданного пользователя сохраняет место, в котором ему показывается погода.
 
     app.get('/api/weather', (req, res) => {
           const query = req.query;
 
-          console.log(query);
-     
-          // res.json(book);
-          res.status(404).send('Book not found');
+          if(query.location) {
+            let loc = WEATHER_DATA.find(l => l.id === query.location)
+            if(loc) {
+              res.json(loc);
+            } else {
+              res.status(404).send('Location id not found');
+            }
+          } else if (query.userId) {
+            res.json(WEATHER_DATA[0]);
+          } else {
+            res.json(WEATHER_DATA);
+          }
     });
+
     app.post('/api/weather', (req, res) => {
-      const userData = req.body;
-
-      console.log('/api/weather', userData);
-
-      res.status(404).send('Book not found');
+      res.json({ 'ok': true });
     });
   
 

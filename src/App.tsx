@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Signup from "./widgets/Signup"
 import Weather from "./widgets/Weather"
 import './App.css'
-import {LoggedInUser, loginUser, signupUser, logoutUser, UserFormData, WeatherData} from './util'
+import { loginUser, signupUser, logoutUser, getLoginToken, getUserPrefs, getWeatherByLocationId} from './util'
+import { LoggedInUser,  UserFormData, WeatherData } from './types'
+
+const DEFAULT_LOCATION_ID = 'NY'
 
 export const App = () => {
     const [currentUser, setCurrentUser] = useState<LoggedInUser>({ email: '' });
@@ -19,6 +22,27 @@ export const App = () => {
         await logoutUser()
         setCurrentUser({ email: '' })
     }
+
+    const locationChanged = (w: WeatherData) => {
+        setWeather(w)
+    }
+
+    useEffect(() => {
+        const ulogin = getLoginToken()
+        if (ulogin) {
+            setCurrentUser({ email: ulogin })
+            const prefs = getUserPrefs()
+            if(prefs.location) {
+                getWeatherByLocationId(prefs.location).then(w => {
+                    setWeather(w)
+                })
+            }
+        } else {
+            getWeatherByLocationId(DEFAULT_LOCATION_ID).then(w => {
+                setWeather(w)
+            })            
+        }
+      }, []);
     return (
         <>
         <div className="container">
@@ -326,7 +350,7 @@ export const App = () => {
             <div className="col-md-4">
                 <div className="position-sticky" style={{ top: "2rem" }}>
                 <div className="p-4 mb-3 bg-warning rounded">
-                    <Weather weatherData={weather} />
+                    <Weather weatherData={weather} locationChanged={locationChanged} />
                 </div>
                 <div className="p-4">
                     <h4 className="fst-italic">Archives</h4>

@@ -1,18 +1,5 @@
 
-export type UserFormData = {
-  userEmail: string;
-  userPassword: string;
-}
-
-export type LoggedInUser = {
-  email: string;
-  error?: Error;
-}
-
-export type WeatherData = {
-  temp: number;
-  location: string;
-}
+import { UserFormData, LoggedInUser, UserPrefs, WeatherData, WeatherLocation } from './types'
 
 export async function loginUser(credentials: UserFormData) : Promise<LoggedInUser> {
   return fetch('/api/signin', {
@@ -24,6 +11,7 @@ export async function loginUser(credentials: UserFormData) : Promise<LoggedInUse
   })
   .then(data => data.json())
   .then(({email}) => {
+    setLoginToken(email)
     return {email}
   })
   .catch((error : Error) => {
@@ -41,11 +29,26 @@ export async function loginUser(credentials: UserFormData) : Promise<LoggedInUse
   })
   .then(data => data.json())
   .then(({email}) => {
+    setLoginToken(email)
     return {email}
   })
   .catch((error : Error) => {
     return {email: '', error}
   })
+}
+
+export async function getWeatherByLocationId(locId: string) : Promise<WeatherData> {
+  return fetch(`api/weather?location=${locId}`, { method: 'GET' })
+  .then(data => data.json())
+}
+
+export async function getWeatherLocations() : Promise<WeatherLocation[]> {
+  return fetch(`api/weather`, { method: 'GET' })
+  .then(data => data.json())
+}
+
+export async function logoutUser() {
+  setLoginToken('')
 }
 
 export function setLoginToken(userToken : string) {
@@ -57,6 +60,15 @@ export function getLoginToken() : string {
   return t || ''
 }
 
-export async function logoutUser() {
-  setLoginToken('')
+
+export function getUserPrefs() : UserPrefs {
+  const p = localStorage.getItem('prefs');
+  if (p) {
+    return JSON.parse(p)
+  } else {
+    return { location: '' }
+  }
+}
+export function setUserPrefs(prefs : UserPrefs) {
+  localStorage.setItem('prefs', JSON.stringify(prefs));
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import {LoggedInUser, UserFormData} from '../util'
+import {LoggedInUser, UserFormData} from '../types'
 
 import './Signup.css'
 
