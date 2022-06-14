@@ -1,58 +1,58 @@
-import React, { useEffect, useState } from "react";
-import Signup from "./widgets/Signup"
-import Weather from "./widgets/Weather"
-import Feedback from "./widgets/Feedback"
+import React, { useEffect, useState } from 'react'
+import Signup from './widgets/Signup'
+import Weather from './widgets/Weather'
+import Feedback from './widgets/Feedback'
 import './App.css'
-import { loginUser, signupUser, logoutUser, getLoginToken, getUserPrefs, getWeatherByLocationId, setUserPrefs, sendFeedback} from './util'
-import { FeedbackData, LoggedInUser,  UserFormData, WeatherData, WeatherLocation } from './types'
+import { loginUser, signupUser, logoutUser, getLoginToken, getUserPrefs, getWeatherByLocationId, setUserPrefs, sendFeedback } from './util'
+import { FeedbackData, LoggedInUser, UserFormData, WeatherData, WeatherLocation } from './types'
 
 const DEFAULT_LOCATION_ID = 'NY'
 
 export const App = () => {
-    const [currentUser, setCurrentUser] = useState<LoggedInUser>({ email: '' });
-    const [weather, setWeather] = useState<WeatherData>({ location: 'New York', temp: 20 });
-    const appLoginUser = async ({ userEmail, userPassword} : UserFormData) => {
-        let u = await loginUser({ userEmail, userPassword})
-        setCurrentUser(u)
-    }
-    const appSignupUser = async ({ userEmail, userPassword} : UserFormData) => {
-        let u = await signupUser({ userEmail, userPassword})
-        setCurrentUser(u)
-    }
-    const appLogoutUser = async () => {
-        await logoutUser()
-        setCurrentUser({ email: '' })
-        setUserPrefs({ location: ''})
-    }
-    const appOnFeedback = (data : FeedbackData) => {
-        return sendFeedback(data)
-    }
-    const userLoggedIn : () => boolean = () => Boolean(currentUser.email)
+  const [currentUser, setCurrentUser] = useState<LoggedInUser>({ email: '' })
+  const [weather, setWeather] = useState<WeatherData>({ location: 'New York', temp: 20 })
+  const appLoginUser = async ({ userEmail, userPassword } : UserFormData) => {
+    const u = await loginUser({ userEmail, userPassword })
+    setCurrentUser(u)
+  }
+  const appSignupUser = async ({ userEmail, userPassword } : UserFormData) => {
+    const u = await signupUser({ userEmail, userPassword })
+    setCurrentUser(u)
+  }
+  const appLogoutUser = async () => {
+    await logoutUser()
+    setCurrentUser({ email: '' })
+    setUserPrefs({ location: '' })
+  }
+  const appOnFeedback = (data : FeedbackData) => {
+    return sendFeedback(data)
+  }
+  const userLoggedIn : () => boolean = () => Boolean(currentUser.email)
 
-    const locationChanged = (w: WeatherLocation) => {
-        setWeather(w as WeatherData)
-        if (userLoggedIn()) {
-            setUserPrefs({ location: w.id })
-        }
+  const locationChanged = (w: WeatherLocation) => {
+    setWeather(w as WeatherData)
+    if (userLoggedIn()) {
+      setUserPrefs({ location: w.id })
     }
+  }
 
-    useEffect(() => {
-        const ulogin = getLoginToken()
-        if (ulogin) {
-            setCurrentUser({ email: ulogin })
-            const prefs = getUserPrefs()
-            if(prefs.location) {
-                getWeatherByLocationId(prefs.location).then(w => {
-                    setWeather(w)
-                })
-            }
-        } else {
-            getWeatherByLocationId(DEFAULT_LOCATION_ID).then(w => {
-                setWeather(w)
-            })            
-        }
-      }, []);
-    return (
+  useEffect(() => {
+    const ulogin = getLoginToken()
+    if (ulogin) {
+      setCurrentUser({ email: ulogin })
+      const prefs = getUserPrefs()
+      if (prefs.location) {
+        getWeatherByLocationId(prefs.location).then(w => {
+          setWeather(w)
+        })
+      }
+    } else {
+      getWeatherByLocationId(DEFAULT_LOCATION_ID).then(w => {
+        setWeather(w)
+      })
+    }
+  }, [])
+  return (
         <>
         <div className="container">
             <header className="blog-header py-3">
@@ -219,7 +219,7 @@ export const App = () => {
                 <h2>Inline HTML elements</h2>
                 <p>
                     HTML defines a long list of available inline tags, a complete list
-                    of which can be found on the{" "}
+                    of which can be found on the{' '}
                     <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">
                     Mozilla Developer Network
                     </a>
@@ -227,55 +227,55 @@ export const App = () => {
                 </p>
                 <ul>
                     <li>
-                    <strong>To bold text</strong>, use{" "}
+                    <strong>To bold text</strong>, use{' '}
                     <code className="language-plaintext highlighter-rouge">
                         &lt;strong&gt;
                     </code>
                     .
                     </li>
                     <li>
-                    <em>To italicize text</em>, use{" "}
+                    <em>To italicize text</em>, use{' '}
                     <code className="language-plaintext highlighter-rouge">
                         &lt;em&gt;
                     </code>
                     .
                     </li>
                     <li>
-                    Abbreviations, like{" "}
-                    <abbr title="HyperText Markup Langage">HTML</abbr> should use{" "}
+                    Abbreviations, like{' '}
+                    <abbr title="HyperText Markup Langage">HTML</abbr> should use{' '}
                     <code className="language-plaintext highlighter-rouge">
                         &lt;abbr&gt;
                     </code>
-                    , with an optional{" "}
+                    , with an optional{' '}
                     <code className="language-plaintext highlighter-rouge">
                         title
-                    </code>{" "}
+                    </code>{' '}
                     attribute for the full phrase.
                     </li>
                     <li>
-                    Citations, like <cite>— Mark Otto</cite>, should use{" "}
+                    Citations, like <cite>— Mark Otto</cite>, should use{' '}
                     <code className="language-plaintext highlighter-rouge">
                         &lt;cite&gt;
                     </code>
                     .
                     </li>
                     <li>
-                    <del>Deleted</del> text should use{" "}
+                    <del>Deleted</del> text should use{' '}
                     <code className="language-plaintext highlighter-rouge">
                         &lt;del&gt;
-                    </code>{" "}
-                    and <ins>inserted</ins> text should use{" "}
+                    </code>{' '}
+                    and <ins>inserted</ins> text should use{' '}
                     <code className="language-plaintext highlighter-rouge">
                         &lt;ins&gt;
                     </code>
                     .
                     </li>
                     <li>
-                    Superscript <sup>text</sup> uses{" "}
+                    Superscript <sup>text</sup> uses{' '}
                     <code className="language-plaintext highlighter-rouge">
                         &lt;sup&gt;
-                    </code>{" "}
-                    and subscript <sub>text</sub> uses{" "}
+                    </code>{' '}
+                    and subscript <sub>text</sub> uses{' '}
                     <code className="language-plaintext highlighter-rouge">
                         &lt;sub&gt;
                     </code>
@@ -354,7 +354,7 @@ export const App = () => {
                 <Feedback userEmail={currentUser.email} onFeedback={appOnFeedback} />
             </div>
             <div className="col-md-4">
-                <div className="position-sticky" style={{ top: "2rem" }}>
+                <div className="position-sticky" style={{ top: '2rem' }}>
                 <div className="p-4 mb-3 bg-warning rounded">
                     <Weather weatherData={weather} locationChanged={locationChanged} />
                 </div>
@@ -419,7 +419,7 @@ export const App = () => {
         </main>
         <footer className="blog-footer">
             <p>
-            Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a>{" "}
+            Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a>{' '}
             by <a href="https://twitter.com/mdo">@mdo</a>.
             </p>
             <p>
@@ -427,7 +427,7 @@ export const App = () => {
             </p>
         </footer>
         </>
-    );
+  )
 }
 
 export default App

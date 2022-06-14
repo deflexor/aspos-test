@@ -23,7 +23,6 @@ export type UserPrefs = {
     location: string;
 }
 
-
 export type Grade = 'good' | 'bad' | null
 
 export type FeedbackData = {

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Suspense } from "react";
-import { FeedbackData, FeedbackResponse, Grade } from "../types";
-import { getLoginToken } from "../util";
+import React, { useEffect, useState, Suspense } from 'react'
+import { FeedbackData, FeedbackResponse, Grade } from '../types'
+import { getLoginToken } from '../util'
 import './Feedback.css'
 
 type FeedbackProps = {
@@ -9,41 +8,41 @@ type FeedbackProps = {
     onFeedback: (data: FeedbackData) => Promise<FeedbackResponse>;
   };
 
-export default function Feedback(props: FeedbackProps) {
-    const [done, setDone] = useState(false);
-    const [error, setError] = useState('');
-    const [grade, setGrade] = useState<Grade>(null);
-    const [userEmail, setUserEmail] = useState('');
-    const [feedbackText, setFeedbackText] = useState('');
-    const handleSubmit = async (e:  React.FormEvent) => {
-        e.preventDefault();
-        setDone(false)
-        let err = ''
-        if(feedbackText === '') {
-            err = 'Feedback text is required'
-        }
-        if(grade === null) {
-            err = 'Rate is required'
-        }
-        if(err !== '') {
-            setError(err)
-        } else {
-            setError('')
-            const userData : FeedbackData = { email: userEmail, text: feedbackText, grade: grade, page: location.href };
-            const resp = await props.onFeedback(userData)
-            if (resp.error) {
-                setError(resp.error)
-            } else {
-                setDone(true)
-            }
-        }
+export default function Feedback (props: FeedbackProps) {
+  const [done, setDone] = useState(false)
+  const [error, setError] = useState('')
+  const [grade, setGrade] = useState<Grade>(null)
+  const [userEmail, setUserEmail] = useState('')
+  const [feedbackText, setFeedbackText] = useState('')
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setDone(false)
+    let err = ''
+    if (feedbackText === '') {
+      err = 'Feedback text is required'
     }
-    useEffect(() => {
-        if (props.userEmail) {
-            setUserEmail(props.userEmail)
-        }
-      }, [props.userEmail]);
-    return (
+    if (grade === null) {
+      err = 'Rate is required'
+    }
+    if (err !== '') {
+      setError(err)
+    } else {
+      setError('')
+      const userData : FeedbackData = { email: userEmail, text: feedbackText, grade, page: location.href }
+      const resp = await props.onFeedback(userData)
+      if (resp.error) {
+        setError(resp.error)
+      } else {
+        setDone(true)
+      }
+    }
+  }
+  useEffect(() => {
+    if (props.userEmail) {
+      setUserEmail(props.userEmail)
+    }
+  }, [props.userEmail])
+  return (
         <div className="p-4 mb-3 bg-warning rounded feedback">
             <h4 className="fst-italic">Feedback Widget</h4>
             <form onSubmit={handleSubmit}>
@@ -77,5 +76,5 @@ export default function Feedback(props: FeedbackProps) {
                 <button type="submit" className="btn btn-primary btn-sm">Send</button>
             </form>
         </div>
-    );
+  )
 }

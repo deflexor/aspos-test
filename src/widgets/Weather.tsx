@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Suspense } from "react";
+import React, { useEffect, useState, Suspense } from 'react'
 import { WeatherData, WeatherLocation } from '../types'
-import { getWeatherLocations } from "../util";
+import { getWeatherLocations } from '../util'
 
 import './Weather.css'
 
@@ -10,16 +9,16 @@ type WeatherProps = {
     locationChanged: (l: WeatherLocation) => void
 };
 
-export default function Weather(props: WeatherProps) {
-    const [locations, setLocations] = useState<WeatherLocation[]>([]);
-    const [ddIsOpen, setddIsOpen] = useState(false);
-    useEffect(() => {
-        getWeatherLocations().then(locs => {
-            setLocations(locs)
-        })
-    }, [])
-    const toggleDropDown = () => setddIsOpen(v => !v)
-    return (
+export default function Weather (props: WeatherProps) {
+  const [locations, setLocations] = useState<WeatherLocation[]>([])
+  const [ddIsOpen, setddIsOpen] = useState(false)
+  useEffect(() => {
+    getWeatherLocations().then(locs => {
+      setLocations(locs)
+    })
+  }, [])
+  const toggleDropDown = () => setddIsOpen(v => !v)
+  return (
         <Suspense fallback={<p>loading...</p>}>
             <div className="p-3 bg-warning rounded">
                 <div className="weather-data">
@@ -42,5 +41,5 @@ export default function Weather(props: WeatherProps) {
                 </div>
             </div>
         </Suspense>
-    );
+  )
 }

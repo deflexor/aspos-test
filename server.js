@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import bodyParser from 'body-parser';
-import cors from 'cors';
+import bodyParser from 'body-parser'
+import cors from 'cors'
 import express from 'express'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -15,58 +15,57 @@ const WEATHER_DATA = [
   { id: 'Msk', location: 'Moscow', temp: 15 },
   { id: 'Paris', location: 'Paris', temp: 19 },
   { id: 'SA', location: 'Saudi Arabia', temp: 36 },
-  { id: 'Norway', 'location': 'Norway', temp: 14 },
+  { id: 'Norway', location: 'Norway', temp: 14 }
 ]
 
 process.env.MY_CUSTOM_SECRET = 'API_KEY_qwertyuiop'
 
-function setupAPI(app) {
-  app.use(cors());
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
+function setupAPI (app) {
+  app.use(cors())
+  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.json())
 
   app.post('/api/signin', (req, res) => {
-    const { userEmail, _userPassword } = req.body;
+    const { userEmail, _userPassword } = req.body
     res.json({ email: userEmail })
-  });
-  
+  })
+
   app.post('/api/signup', (req, res) => {
-    const { userEmail, _userPassword } = req.body;
+    const { userEmail, _userPassword } = req.body
     res.json({ email: userEmail })
-  });
+  })
 
   app.get('/api/weather', (req, res) => {
-        const query = req.query;
+    const query = req.query
 
-        if(query.location) {
-          let loc = WEATHER_DATA.find(l => l.id === query.location)
-          if(loc) {
-            res.json(loc);
-          } else {
-            res.status(404).send('Location id not found');
-          }
-        } else if (query.userId) {
-          res.json(WEATHER_DATA[0]);
-        } else {
-          res.json(WEATHER_DATA);
-        }
-  });
+    if (query.location) {
+      const loc = WEATHER_DATA.find(l => l.id === query.location)
+      if (loc) {
+        res.json(loc)
+      } else {
+        res.status(404).send('Location id not found')
+      }
+    } else if (query.userId) {
+      res.json(WEATHER_DATA[0])
+    } else {
+      res.json(WEATHER_DATA)
+    }
+  })
 
   app.post('/api/weather', (req, res) => {
-    res.json({ 'ok': true });
-  });
-  
-  app.post('/api/feedback', (req, res) => {
-    const userData = req.body;
+    res.json({ ok: true })
+  })
 
-    console.log('/api/feedback', userData);
+  app.post('/api/feedback', (req, res) => {
+    const userData = req.body
+
+    console.log('/api/feedback', userData)
 
     res.json({ ok: true })
-  });
-
+  })
 }
 
-export async function createServer(
+export async function createServer (
   root = process.cwd(),
   isProd = process.env.NODE_ENV === 'production',
   hmrPort
@@ -139,7 +138,7 @@ export async function createServer(
         return res.redirect(301, context.url)
       }
 
-      const html = template.replace(`<!--app-html-->`, appHtml)
+      const html = template.replace('<!--app-html-->', appHtml)
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {

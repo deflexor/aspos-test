@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-import {LoggedInUser, UserFormData} from '../types'
+import { LoggedInUser, UserFormData } from '../types'
 
 import './Signup.css'
 
@@ -11,45 +11,46 @@ type SignupProps = {
     onLogout: () => void;
   };
 
-export default function Signup(props: SignupProps) {
-    const [error, setError] = useState('');
-    const [userEmail, setUserEmail] = useState('');
-    const [userPassword, setUserPassword] = useState('');
-    const [isSignup, setSignup] = useState(false);
+export default function Signup (props: SignupProps) {
+  const [error, setError] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+  const [userPassword, setUserPassword] = useState('')
+  const [isSignup, setSignup] = useState(false)
 
-    const handleSubmit = async (e:  React.FormEvent) => {
-        e.preventDefault();
-        let err = ''
-        if(userPassword === '') {
-            err = 'Password is required'
-        }
-        if(userEmail === '') {
-            err = 'E-mail is required'
-        }
-        if(err !== '') {
-            setError(err)
-        } else {
-            setError('')
-            const userData : UserFormData = { userEmail, userPassword };
-            const loginCB = isSignup ? props.onSignup : props.onSignin
-            loginCB(userData)
-        }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    let err = ''
+    if (userPassword === '') {
+      err = 'Password is required'
     }
+    if (userEmail === '') {
+      err = 'E-mail is required'
+    }
+    if (err !== '') {
+      setError(err)
+    } else {
+      setError('')
+      const userData : UserFormData = { userEmail, userPassword }
+      const loginCB = isSignup ? props.onSignup : props.onSignin
+      loginCB(userData)
+    }
+  }
 
-    let html : React.ReactNode
-    if(props.user.email) {
-        html = (
+  let html : React.ReactNode
+  if (props.user.email) {
+    html = (
         <div>
             <div className="mb-3">{props.user.email}</div>
             <button type="button" className="btn btn-link" onClick={e => { e.preventDefault(); props.onLogout() }}>Exit</button>
         </div>
-        )
-    } else {
-        html = (
+    )
+  } else {
+    html = (
         <form onSubmit={handleSubmit}>
             <div className="small error">
-                {props.user.error ? <div id="emailHelp" className="text-danger">{props.user.error.message}</div>
-                : error ? <div id="emailHelp" className="text-danger">{error}</div> : ''
+                {props.user.error
+                  ? <div id="emailHelp" className="text-danger">{props.user.error.message}</div>
+                  : error ? <div id="emailHelp" className="text-danger">{error}</div> : ''
                 }
             </div>
             <div className="mb-3">
@@ -60,16 +61,17 @@ export default function Signup(props: SignupProps) {
             </div>
             <div className="login-btns">
                 <button type="submit" className="btn btn-primary btn-sm">{isSignup ? 'Login' : 'Signup'}</button>
-                {isSignup ? <button type="button" className="btn btn-link" onClick={e => { e.preventDefault(); setSignup(false)}}>Signup</button>
-                      : <button type="button" className="btn btn-link" onClick={e => { e.preventDefault(); setSignup(true)}}>Signin</button>
+                {isSignup
+                  ? <button type="button" className="btn btn-link" onClick={e => { e.preventDefault(); setSignup(false) }}>Signup</button>
+                  : <button type="button" className="btn btn-link" onClick={e => { e.preventDefault(); setSignup(true) }}>Signin</button>
                 }
             </div>
         </form>)
-    }
+  }
 
-    return (
+  return (
         <div className="p-3 bg-warning rounded signup-form">
             {html}
         </div>
-    );
+  )
 }
