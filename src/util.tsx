@@ -1,5 +1,5 @@
 
-import { UserFormData, LoggedInUser, UserPrefs, WeatherData, WeatherLocation } from './types'
+import { UserFormData, LoggedInUser, UserPrefs, WeatherData, WeatherLocation, FeedbackData, FeedbackResponse } from './types'
 
 export async function loginUser(credentials: UserFormData) : Promise<LoggedInUser> {
   return fetch('/api/signin', {
@@ -20,7 +20,7 @@ export async function loginUser(credentials: UserFormData) : Promise<LoggedInUse
  }
 
  export async function signupUser(credentials: UserFormData) : Promise<LoggedInUser> {
-  return fetch('api/signup', {
+  return fetch('/api/signup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -38,13 +38,30 @@ export async function loginUser(credentials: UserFormData) : Promise<LoggedInUse
 }
 
 export async function getWeatherByLocationId(locId: string) : Promise<WeatherData> {
-  return fetch(`api/weather?location=${locId}`, { method: 'GET' })
+  return fetch(`/api/weather?location=${locId}`, { method: 'GET' })
   .then(data => data.json())
 }
 
 export async function getWeatherLocations() : Promise<WeatherLocation[]> {
   return fetch(`api/weather`, { method: 'GET' })
   .then(data => data.json())
+}
+
+export async function sendFeedback(data: FeedbackData) : Promise<FeedbackResponse> {
+  return fetch('/api/feedback', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(data => data.json())
+  .then(() => {
+    return {ok: true}
+  })
+  .catch((error : Error) => {
+    return {ok: false, error: error.message}
+  })
 }
 
 export async function logoutUser() {

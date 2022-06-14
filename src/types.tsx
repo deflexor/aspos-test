@@ -22,3 +22,18 @@ export type WeatherLocation = {
 export type UserPrefs = {
     location: string;
 }
+
+
+export type Grade = 'good' | 'bad' | null
+
+export type FeedbackData = {
+    grade: Grade;
+    text: string;
+    email: string;
+    page: string;
+}
+
+export type FeedbackResponse = {
+    ok: boolean;
+    error?: string;
+}

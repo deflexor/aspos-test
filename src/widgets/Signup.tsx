@@ -41,7 +41,7 @@ export default function Signup(props: SignupProps) {
         html = (
         <div>
             <div className="mb-3">{props.user.email}</div>
-            <a href="" onClick={e => { e.preventDefault(); props.onLogout() }}>Exit</a>
+            <button type="button" className="btn btn-link" onClick={e => { e.preventDefault(); props.onLogout() }}>Exit</button>
         </div>
         )
     } else {
@@ -60,14 +60,15 @@ export default function Signup(props: SignupProps) {
             </div>
             <div className="login-btns">
                 <button type="submit" className="btn btn-primary btn-sm">{isSignup ? 'Login' : 'Signup'}</button>
-                {isSignup ? <a href="" onClick={e => { e.preventDefault(); setSignup(false)}}>Signup</a>
-                      : <a href="" onClick={e => { e.preventDefault(); setSignup(true)}}>Signin</a>}
+                {isSignup ? <button type="button" className="btn btn-link" onClick={e => { e.preventDefault(); setSignup(false)}}>Signup</button>
+                      : <button type="button" className="btn btn-link" onClick={e => { e.preventDefault(); setSignup(true)}}>Signin</button>
+                }
             </div>
         </form>)
     }
 
     return (
-        <div className="p-3 bg-warning rounded">
+        <div className="p-3 bg-warning rounded signup-form">
             {html}
         </div>
     );

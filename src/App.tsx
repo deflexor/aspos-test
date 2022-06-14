@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Signup from "./widgets/Signup"
 import Weather from "./widgets/Weather"
+import Feedback from "./widgets/Feedback"
 import './App.css'
-import { loginUser, signupUser, logoutUser, getLoginToken, getUserPrefs, getWeatherByLocationId} from './util'
-import { LoggedInUser,  UserFormData, WeatherData } from './types'
+import { loginUser, signupUser, logoutUser, getLoginToken, getUserPrefs, getWeatherByLocationId, setUserPrefs, sendFeedback} from './util'
+import { FeedbackData, LoggedInUser,  UserFormData, WeatherData, WeatherLocation } from './types'
 
 const DEFAULT_LOCATION_ID = 'NY'
 
 export const App = () => {
     const [currentUser, setCurrentUser] = useState<LoggedInUser>({ email: '' });
-    const [weather, setWeather] = useState<WeatherData>({ location: 'NY', temp: 20 });
+    const [weather, setWeather] = useState<WeatherData>({ location: 'New York', temp: 20 });
     const appLoginUser = async ({ userEmail, userPassword} : UserFormData) => {
         let u = await loginUser({ userEmail, userPassword})
         setCurrentUser(u)
@@ -21,10 +22,18 @@ export const App = () => {
     const appLogoutUser = async () => {
         await logoutUser()
         setCurrentUser({ email: '' })
+        setUserPrefs({ location: ''})
     }
+    const appOnFeedback = (data : FeedbackData) => {
+        return sendFeedback(data)
+    }
+    const userLoggedIn : () => boolean = () => Boolean(currentUser.email)
 
-    const locationChanged = (w: WeatherData) => {
-        setWeather(w)
+    const locationChanged = (w: WeatherLocation) => {
+        setWeather(w as WeatherData)
+        if (userLoggedIn()) {
+            setUserPrefs({ location: w.id })
+        }
     }
 
     useEffect(() => {
@@ -342,10 +351,7 @@ export const App = () => {
                     used throughout.
                 </p>
                 </article>
-                <div className="p-4 mb-3 bg-warning rounded">
-                <h4 className="fst-italic">Feedback Widget</h4>
-                <p className="mb-0">Customize this section to submit feedback.</p>
-                </div>
+                <Feedback userEmail={currentUser.email} onFeedback={appOnFeedback} />
             </div>
             <div className="col-md-4">
                 <div className="position-sticky" style={{ top: "2rem" }}>

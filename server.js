@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const isTest = process.env.NODE_ENV === 'test' || !!process.env.VITE_TEST_BUILD
 
 const WEATHER_DATA = [
-  { id: 'NY', location: 'NY', temp: 20 },
+  { id: 'NY', location: 'New York', temp: 20 },
   { id: 'Tokyo', location: 'Tokyo', temp: 24 },
   { id: 'Msk', location: 'Moscow', temp: 15 },
   { id: 'Paris', location: 'Paris', temp: 19 },
@@ -35,57 +35,34 @@ function setupAPI(app) {
     res.json({ email: userEmail })
   });
 
-    /*
-     Виджет показывает температуру в выбранном месте (Например, “NY 20°C”). 
-     Место, для которого отображается температура, можно выбрать из списка доступных. 
-     Если пользователь не вошел в систему, то показывается погода в месте по умолчанию.
-     Если пользователь вошел в систему, то показывается погода в месте,
-    которое он сохранил в системе для себя (или погода в месте по умолчанию, если пользователь не сохранял погоду).
+  app.get('/api/weather', (req, res) => {
+        const query = req.query;
 
-     */
-
-    app.get('/api/weather', (req, res) => {
-          const query = req.query;
-
-          if(query.location) {
-            let loc = WEATHER_DATA.find(l => l.id === query.location)
-            if(loc) {
-              res.json(loc);
-            } else {
-              res.status(404).send('Location id not found');
-            }
-          } else if (query.userId) {
-            res.json(WEATHER_DATA[0]);
+        if(query.location) {
+          let loc = WEATHER_DATA.find(l => l.id === query.location)
+          if(loc) {
+            res.json(loc);
           } else {
-            res.json(WEATHER_DATA);
+            res.status(404).send('Location id not found');
           }
-    });
+        } else if (query.userId) {
+          res.json(WEATHER_DATA[0]);
+        } else {
+          res.json(WEATHER_DATA);
+        }
+  });
 
-    app.post('/api/weather', (req, res) => {
-      res.json({ 'ok': true });
-    });
+  app.post('/api/weather', (req, res) => {
+    res.json({ 'ok': true });
+  });
   
+  app.post('/api/feedback', (req, res) => {
+    const userData = req.body;
 
-    /*     Виджет Обратная связь
-    Этот виджет нужно добавить после текста статьи.
-    Виджет позволяет отправить обратную связь о странице: 
-    оценка (хорошо или плохо),
-    текст (не более 200 символов),
-    email пользователя (если пользователь вошел в систему, то email добавляется автоматически, а для анонимного пользователя это поле необязательное, его можно заполнить).
-    API
-    POST api/feedback–отправляет обратную связь о странице.
-    Параметры:
-    text – текст обратной связи
-    grade – оценка страницы (возможные значения “good” и “bad”)
-    page – адрес страницы, которой дается обратная связь.
-    email – необязательный параметр. */
-    app.post('/api/feedback', (req, res) => {
-      const userData = req.body;
+    console.log('/api/feedback', userData);
 
-      console.log('/api/feedback', userData);
-
-      res.status(404).send('Book not found');
-    });
+    res.json({ ok: true })
+  });
 
 }
 
