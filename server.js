@@ -123,21 +123,22 @@ export async function createServer (
         // always read fresh template in dev
         template = fs.readFileSync(resolve('index.html'), 'utf-8')
         template = await vite.transformIndexHtml(url, template)
-        render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
+        // render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
       } else {
         template = indexProd
         // @ts-ignore
-        render = (await import('./dist/server/entry-server.js')).render
+        // render = (await import('./dist/server/entry-server.tsx')).render
       }
 
-      const context = {}
-      const appHtml = render(url, context)
+      // const context = {}
+      // const appHtml = render(url, context)
 
-      if (context.url) {
+      /*if (context.url) {
         // Somewhere a `<Redirect>` was rendered
         return res.redirect(301, context.url)
-      }
+      }*/
 
+      const appHtml = ''
       const html = template.replace('<!--app-html-->', appHtml)
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
