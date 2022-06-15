@@ -77,14 +77,14 @@ export function getLoginToken () : string {
   return t || ''
 }
 
-export function getUserPrefs () : UserPrefs {
-  const p = localStorage.getItem('prefs')
+export function getUserPrefs (userToken : string) : UserPrefs {
+  const p = localStorage.getItem(`prefs_${userToken}`)
   if (p) {
     return JSON.parse(p)
   } else {
     return { location: '' }
   }
 }
-export function setUserPrefs (prefs : UserPrefs) {
-  localStorage.setItem('prefs', JSON.stringify(prefs))
+export function setUserPrefs (userToken : string, prefs : UserPrefs) {
+  localStorage.setItem(`prefs_${userToken}`, JSON.stringify(prefs))
 }

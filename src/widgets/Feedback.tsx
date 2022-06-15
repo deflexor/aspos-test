@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Suspense } from 'react'
+import ReactDOM from 'react-dom';
 import { FeedbackData, FeedbackResponse, Grade } from '../types'
 import { getLoginToken } from '../util'
 import './Feedback.css'
@@ -42,39 +43,40 @@ export default function Feedback (props: FeedbackProps) {
       setUserEmail(props.userEmail)
     }
   }, [props.userEmail])
-  return (
-        <div className="p-4 mb-3 bg-warning rounded feedback">
-            <h4 className="fst-italic">Feedback Widget</h4>
-            <form onSubmit={handleSubmit}>
-                <div className="small error">
-                    { error ? <div className="text-danger">{error}</div> : '' }
-                    { done ? <div className="text-success">Your feedback is succesfully sent!</div> : '' }
-                </div>
-                <div className="mb-3">
-                    <label className="form-label rate-label">Rate the article</label>
-                    <div className="form-check form-check-inline">
-                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                         id="inlineRadio1" value="Good" onChange={e => setGrade('Good' as Grade)} />
-                        <label className="form-check-label" htmlFor="inlineRadio1">Good</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                         id="inlineRadio2" value="Bad" onChange={e => setGrade('Bad' as Grade)} />
-                        <label className="form-check-label" htmlFor="inlineRadio2">Bad</label>
-                    </div>
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleFormControlInput1" className="form-label">Your E-mail address</label>
-                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com"
-                     value={userEmail} onChange={e => setUserEmail(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Feedback text</label>
-                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}
-                     onChange={e => setFeedbackText(e.target.value)}></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary btn-sm">Send</button>
-            </form>
-        </div>
-  )
+
+  return ReactDOM.createPortal(
+  <div className="p-4 mb-3 bg-warning rounded feedback">
+  <h4 className="fst-italic">Feedback Widget</h4>
+  <form onSubmit={handleSubmit}>
+      <div className="small error">
+          { error ? <div className="text-danger">{error}</div> : '' }
+          { done ? <div className="text-success">Your feedback is succesfully sent!</div> : '' }
+      </div>
+      <div className="mb-3">
+          <label className="form-label rate-label">Rate the article</label>
+          <div className="form-check form-check-inline">
+              <input className="form-check-input" type="radio" name="inlineRadioOptions"
+               id="inlineRadio1" value="Good" onChange={e => setGrade('Good' as Grade)} />
+              <label className="form-check-label" htmlFor="inlineRadio1">Good</label>
+          </div>
+          <div className="form-check form-check-inline">
+              <input className="form-check-input" type="radio" name="inlineRadioOptions"
+               id="inlineRadio2" value="Bad" onChange={e => setGrade('Bad' as Grade)} />
+              <label className="form-check-label" htmlFor="inlineRadio2">Bad</label>
+          </div>
+      </div>
+      <div className="mb-3">
+          <label htmlFor="exampleFormControlInput1" className="form-label">Your E-mail address</label>
+          <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com"
+           value={userEmail} onChange={e => setUserEmail(e.target.value)} />
+      </div>
+      <div className="mb-3">
+          <label htmlFor="exampleFormControlTextarea1" className="form-label">Feedback text</label>
+          <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}
+           onChange={e => setFeedbackText(e.target.value)}></textarea>
+      </div>
+      <button type="submit" className="btn btn-primary btn-sm">Send</button>
+  </form>
+  </div>
+  , document.getElementById('feedbackWidget')!)
 }

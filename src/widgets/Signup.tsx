@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import ReactDOM from 'react-dom';
 
 import { LoggedInUser, UserFormData } from '../types'
 
@@ -69,9 +70,9 @@ export default function Signup (props: SignupProps) {
         </form>)
   }
 
-  return (
+  return ReactDOM.createPortal(
         <div className="p-3 bg-warning rounded signup-form">
             {html}
-        </div>
+        </div>, document.getElementById('signupWidget')!
   )
 }

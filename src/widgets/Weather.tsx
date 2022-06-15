@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Suspense } from 'react'
+import ReactDOM from 'react-dom';
 import { WeatherData, WeatherLocation } from '../types'
 import { getWeatherLocations } from '../util'
 
@@ -18,7 +19,7 @@ export default function Weather (props: WeatherProps) {
     })
   }, [])
   const toggleDropDown = () => setddIsOpen(v => !v)
-  return (
+  return ReactDOM.createPortal(
     <div className="p-3 bg-warning rounded">
         <Suspense fallback={<p>loading...</p>}>
             <div className="weather-data">
@@ -40,6 +41,5 @@ export default function Weather (props: WeatherProps) {
                 </ul>
             </div>
         </Suspense>
-    </div>
-  )
+    </div>, document.getElementById('weatherWidget')!)
 }
